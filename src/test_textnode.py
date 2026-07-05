@@ -55,40 +55,12 @@ not_equal_cases: list[list[TextNode]] = [
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
-        print(
-            """
-----------------------------------------------------------------------
-Testing equal_cases
-            """
-        )
         for case in equal_cases:
-            node = case[0]
-            node2 = case[1]
-            print(
-                f"""
-Testing:
-{node}
-{node2}"""
-            )
-            self.assertEqual(node, node2)
+            self.assertEqual(case[0], case[1])
 
     def test_not_eq(self):
-        print(
-            """
-----------------------------------------------------------------------
-Testing not_equal_cases
-            """
-        )
         for case in not_equal_cases:
-            node = case[0]
-            node2 = case[1]
-            print(
-                f"""
-Testing:
-{node}
-{node2}"""
-            )
-            self.assertNotEqual(node, node2)
+            self.assertNotEqual(case[0], case[1])
 
 
 if __name__ == "__main__":
