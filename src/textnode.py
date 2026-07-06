@@ -1,5 +1,5 @@
 from enum import Enum
-from htmlnode import HTMLNode, ParentNode, LeafNode
+from htmlnode import LeafNode
 
 
 class TextType(Enum):
@@ -18,6 +18,8 @@ class TextNode:
         self.url = url
 
     def __eq__(self, other) -> bool:
+        if not isinstance(other, TextNode):
+            return False
         return (
             self.text == other.text
             and self.text_type == other.text_type
@@ -40,8 +42,12 @@ def text_node_to_html_node(text_node: TextNode) -> LeafNode:
     if text_node.text_type is TextType.CODE:
         return LeafNode("code", text_node.text)
     if text_node.text_type is TextType.LINK:
+        if text_node.url is None:
+            raise ValueError("invalid url")
         return LeafNode("a", text_node.text, {"href": f"{text_node.url}"})
     if text_node.text_type is TextType.IMAGE:
+        if not text_node.url:
+            raise ValueError("invalid url")
         return LeafNode(
             "img", "", {"src": f"{text_node.url}", "alt": f"{text_node.text}"}
         )

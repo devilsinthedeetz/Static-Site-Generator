@@ -59,3 +59,19 @@ class TestNodeConversion(unittest.TestCase):
         node = TextNode("im an invalid", "not a TextType")
         with self.assertRaises(Exception):
             text_node_to_html_node(node)
+
+    def test_invalid_url_image(self):
+        node = TextNode("alt text", TextType.IMAGE)
+        node2 = TextNode("alt text", TextType.IMAGE, "")
+        with self.assertRaises(ValueError):
+            text_node_to_html_node(node)
+        with self.assertRaises(ValueError):
+            text_node_to_html_node(node2)
+
+    def test_invalid_url_link(self):
+        node = TextNode("Click Me!", TextType.LINK)
+        node2 = TextNode("Click Me!", TextType.LINK, None)
+        with self.assertRaises(ValueError):
+            text_node_to_html_node(node)
+        with self.assertRaises(ValueError):
+            text_node_to_html_node(node2)
