@@ -1,7 +1,11 @@
 from re import I
 from typing import ItemsView
 import unittest
-from inline_md_to_text_node import split_nodes_delimiter
+from inline_md_to_text_node import (
+    split_nodes_delimiter,
+    extract_markdown_images,
+    extract_markdown_links,
+)
 from textnode import TextNode, TextType
 
 
@@ -147,3 +151,45 @@ class TestMDConversion(unittest.TestCase):
             split_nodes_delimiter([node2], "_", TextType.ITALIC)
         with self.assertRaises(Exception):
             split_nodes_delimiter([node3], "`", TextType.CODE)
+
+    def test_extract_markdown_images(self):
+        matches = extract_markdown_images(
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"
+        )
+        self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png")], matches)
+
+    def test_extract_multiple_images(self):
+        matches = extract_markdown_images(
+            "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        )
+        self.assertEqual(
+            [
+                ("rick roll", "https://i.imgur.com/aKaOqIh.gif"),
+                ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg"),
+            ],
+            matches,
+        )
+
+    def test_extract_markdown_links(self):
+        matches = extract_markdown_links(
+            "This is text with a [link](https://www.google.com)"
+        )
+        self.assertEqual([("link", "https://www.google.com")], matches)
+
+    def test_extract_multiple_links(self):
+        matches = extract_markdown_links(
+            "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
+        )
+        self.assertEqual(
+            [
+                ("to boot dev", "https://www.boot.dev"),
+                ("to youtube", "https://www.youtube.com/@bootdotdev"),
+            ],
+            matches,
+        )
+
+    def test_extract_images_links_no_matches(self):
+        matches = extract_markdown_images("I should return no matches")
+        matches2 = extract_markdown_links("I should call her")
+        self.assertEqual([], matches)
+        self.assertEqual([], matches2)
