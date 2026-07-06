@@ -10,6 +10,22 @@ class HTMLNode:
         self.value = value
         self.children = children
         self.props = props
+        self.voidTags = [
+            "area",
+            "base",
+            "br",
+            "col",
+            "embed",
+            "hr",
+            "img",
+            "input",
+            "link",
+            "meta",
+            "param",
+            "source",
+            "track",
+            "wbr",
+        ]
 
     def to_html(self):
         raise NotImplementedError("to_html override required to render html")
@@ -41,6 +57,8 @@ class LeafNode(HTMLNode):
             raise ValueError("LeafNode must have a value")
         if not self.tag:
             return self.value
+        if self.tag in self.voidTags:
+            return f"<{self.tag}{self.props_to_html()}>{self.value}"
         return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
 
     def __repr__(self) -> str:

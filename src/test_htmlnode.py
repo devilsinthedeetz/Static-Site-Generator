@@ -149,7 +149,7 @@ class TestHTMLNode(unittest.TestCase):
             "span", [paragraph_node], props={"style": "text-align:right"}
         )
         top_parent_node = ParentNode("div", [text_container_node, img_container_node])
-        comparison = '<div><span style="text-align:right"><p>WWF\'s goal is to:<q>Build a future where people live in harmony with nature.</q></p></span><div><img src="image.png" alt="Example Image" width="400"></img></div></div>'
+        comparison = '<div><span style="text-align:right"><p>WWF\'s goal is to:<q>Build a future where people live in harmony with nature.</q></p></span><div><img src="image.png" alt="Example Image" width="400"></div></div>'
         self.assertEqual(top_parent_node.to_html(), comparison)
 
     def test_to_html_no_tag(self):
