@@ -1,5 +1,3 @@
-from re import I
-from typing import ItemsView
 import unittest
 from inline_md_to_text_node import (
     split_nodes_delimiter,
@@ -381,3 +379,63 @@ class TestMDConversion(unittest.TestCase):
                 TextNode("link", TextType.LINK, "https://boot.dev"),
             ],
         )
+
+    def test_text_to_text_node_plain_text(self):
+        self.assertEqual(
+            text_to_text_node("Just plain text"),
+            [
+                TextNode("Just plain text", TextType.TEXT),
+            ],
+        )
+
+    def test_text_to_text_node_code_protects_markdown(self):
+        self.assertEqual(
+            text_to_text_node("before `**not bold** _not italic_ [link](url)` after"),
+            [
+                TextNode("before ", TextType.TEXT),
+                TextNode(
+                    "**not bold** _not italic_ [link](url)",
+                    TextType.CODE,
+                ),
+                TextNode(" after", TextType.TEXT),
+            ],
+        )
+
+    # Change the following test whenever you add nesting functionality.
+    def test_text_to_text_node_nested_markup(self):
+        self.assertEqual(
+            text_to_text_node("**bold _italic_ text**"),
+            [
+                TextNode("bold _italic_ text", TextType.BOLD),
+            ],
+        )
+
+    def test_text_to_text_node_adjacent_markup(self):
+        self.assertEqual(
+            text_to_text_node("**bold**_italic_`code`"),
+            [
+                TextNode("bold", TextType.BOLD),
+                TextNode("italic", TextType.ITALIC),
+                TextNode("code", TextType.CODE),
+            ],
+        )
+
+    def test_text_to_text_node_multiple_links_and_images(self):
+        self.assertEqual(
+            text_to_text_node("![one](a.png) [two](b.com) ![three](c.png)"),
+            [
+                TextNode("one", TextType.IMAGE, "a.png"),
+                TextNode(" ", TextType.TEXT),
+                TextNode("two", TextType.LINK, "b.com"),
+                TextNode(" ", TextType.TEXT),
+                TextNode("three", TextType.IMAGE, "c.png"),
+            ],
+        )
+
+    def test_text_to_text_node_unclosed_bold(self):
+        with self.assertRaises(Exception):
+            text_to_text_node("This is **broken")
+
+    def test_text_to_text_node_unclosed_code(self):
+        with self.assertRaises(Exception):
+            text_to_text_node("This is `broken")
