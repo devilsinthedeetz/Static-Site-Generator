@@ -1,4 +1,5 @@
 import os
+from os.path import isfile
 import shutil
 from blocknode import markdown_to_html_node
 from pathlib import Path
@@ -12,6 +13,36 @@ def extract_title(md) -> str:
         return title
     else:
         raise Exception("markdown file must start with heading")
+
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    content_dir_list: list[str] = os.listdir(dir_path_content)
+    if not content_dir_list:
+        return
+    for path in content_dir_list:
+        html_path = path.replace(".md", ".html")
+        if os.path.exists(os.path.join(dest_dir_path, html_path)):
+            continue
+        elif os.path.isfile(os.path.join(dir_path_content, path)) and path.endswith(
+            ".md"
+        ):
+            if not os.path.isdir(dest_dir_path):
+                os.mkdir(dest_dir_path)
+            generate_page(
+                os.path.join(dir_path_content, path),
+                template_path,
+                os.path.join(dest_dir_path, html_path),
+            )
+        elif os.path.isdir(os.path.join(dir_path_content, path)):
+            if not os.path.exists(dest_dir_path):
+                os.mkdir(dest_dir_path)
+            if not os.path.exists(os.path.join(dest_dir_path, path)):
+                os.mkdir(os.path.join(dest_dir_path, path))
+            generate_pages_recursive(
+                os.path.join(dir_path_content, path),
+                template_path,
+                os.path.join(dest_dir_path, path),
+            )
 
 
 def generate_page(from_path, template_path, dest_path):
@@ -70,7 +101,7 @@ def copy_static_to_public(source_path: str, dest_path: str, deleted: bool):
 
 def main():
     copy_static_to_public("static", "public", False)
-    generate_page("content/index.md", "template.html", "public/index.html")
+    generate_pages_recursive("content", "template.html", "public")
 
 
 main()
