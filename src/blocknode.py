@@ -100,7 +100,9 @@ def paragraph_to_html_node(block_text: str) -> ParentNode:
 def block_quote_to_html_node(block_text: str) -> ParentNode:
     return ParentNode(
         "blockquote",
-        text_to_children("\n".join(line[1:] for line in block_text.splitlines())),
+        text_to_children(
+            "\n".join(line[1:].strip() for line in block_text.splitlines())
+        ),
     )
 
 
