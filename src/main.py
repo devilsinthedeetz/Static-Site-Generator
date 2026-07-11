@@ -1,8 +1,7 @@
 import os
-from os.path import isfile
 import shutil
+import sys
 from blocknode import markdown_to_html_node
-from pathlib import Path
 
 
 def extract_title(md) -> str:
@@ -15,7 +14,7 @@ def extract_title(md) -> str:
         raise Exception("markdown file must start with heading")
 
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, base_path):
     content_dir_list: list[str] = os.listdir(dir_path_content)
     if not content_dir_list:
         return
@@ -32,6 +31,7 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
                 os.path.join(dir_path_content, path),
                 template_path,
                 os.path.join(dest_dir_path, html_path),
+                base_path,
             )
         elif os.path.isdir(os.path.join(dir_path_content, path)):
             if not os.path.exists(dest_dir_path):
@@ -42,10 +42,11 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
                 os.path.join(dir_path_content, path),
                 template_path,
                 os.path.join(dest_dir_path, path),
+                base_path,
             )
 
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, base_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     md: str = ""
     template: str = ""
@@ -55,8 +56,11 @@ def generate_page(from_path, template_path, dest_path):
         template = file.read()
     html: str = markdown_to_html_node(md).to_html()
     title: str = extract_title(md)
+    # replace stuff
     final_file: str = template.replace("{{ Title }}", title)
     final_file = final_file.replace("{{ Content }}", html)
+    final_file = final_file.replace('href="/', f'href="{base_path}')
+    final_file = final_file.replace('src="/', f"src={base_path}")
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     with open(dest_path, "w") as file:
         file.write(final_file)
@@ -100,8 +104,14 @@ def copy_static_to_public(source_path: str, dest_path: str, deleted: bool):
 
 
 def main():
-    copy_static_to_public("static", "public", False)
-    generate_pages_recursive("content", "template.html", "public")
+    base_path = "/"
+    try:
+        base_path = sys.argv[1]
+    except IndexError:
+        print("sys.argv[1] out of range")
+        print("using base_path '/'")
+    copy_static_to_public("static", "docs", False)
+    generate_pages_recursive("content", "template.html", "docs", base_path)
 
 
 main()
