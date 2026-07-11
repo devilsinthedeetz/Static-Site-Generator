@@ -69,44 +69,30 @@ def split_nodes_image(old_nodes: list[TextNode]) -> list[TextNode]:
     copy_nodes = old_nodes.copy()
     new_nodes: list[TextNode] = []
     for node in copy_nodes:
-        extracted_images = extract_markdown_images(node.text)
-        node_first_split = False
         if node.text_type != TextType.TEXT:
             new_nodes.append(node)
-        elif not extracted_images:
+            continue
+        original_text = node.text
+        images = extract_markdown_images(original_text)
+        if len(images) == 0:
             new_nodes.append(node)
-        else:
-            split_nodes = []
-            for extracted_image in extracted_images:
-                image_inserted = False
-                image_alt, image_url = extracted_image
-                delimiter = f"![{image_alt}]({image_url})"
-                if not node_first_split:
-                    sections = node.text.split(delimiter, 1)
-                    node_first_split = True
-                    split_nodes.extend(
-                        [
-                            TextNode(sections[0], TextType.TEXT),
-                            TextNode(image_alt, TextType.IMAGE, image_url),
-                            TextNode(sections[1], TextType.TEXT),
-                        ]
-                    )
-                    image_inserted = True
-                if node_first_split and not image_inserted:
-                    working_node = split_nodes[-1]
-                    del split_nodes[-1]
-                    sections = working_node.text.split(delimiter, 1)
-                    split_nodes.extend(
-                        [
-                            TextNode(sections[0], TextType.TEXT),
-                            TextNode(image_alt, TextType.IMAGE, image_url),
-                            TextNode(sections[1], TextType.TEXT),
-                        ]
-                    )
-                    image_inserted = True
-                if image_inserted:
-                    continue
-            new_nodes.extend(remove_empty_text_nodes(split_nodes))
+            continue
+        for image in images:
+            sections = original_text.split(f"![{image[0]}]({image[1]})", 1)
+            if len(sections) != 2:
+                raise ValueError("invalid markdown, image section not closed")
+            if sections[0] != "":
+                new_nodes.append(TextNode(sections[0], TextType.TEXT))
+            new_nodes.append(
+                TextNode(
+                    image[0],
+                    TextType.IMAGE,
+                    image[1],
+                )
+            )
+            original_text = sections[1]
+        if original_text != "":
+            new_nodes.append(TextNode(original_text, TextType.TEXT))
     return new_nodes
 
 
@@ -116,44 +102,24 @@ def split_nodes_link(old_nodes: list[TextNode]) -> list[TextNode]:
     copy_nodes = old_nodes.copy()
     new_nodes: list[TextNode] = []
     for node in copy_nodes:
-        extracted_links = extract_markdown_links(node.text)
-        node_first_split = False
         if node.text_type != TextType.TEXT:
             new_nodes.append(node)
-        elif not extracted_links:
+            continue
+        original_text = node.text
+        links = extract_markdown_links(original_text)
+        if len(links) == 0:
             new_nodes.append(node)
-        else:
-            split_nodes = []
-            for extracted_link in extracted_links:
-                link_inserted = False
-                link_text, link_url = extracted_link
-                deliminator = f"[{link_text}]({link_url})"
-                if not node_first_split:
-                    sections = node.text.split(deliminator, 1)
-                    node_first_split = True
-                    split_nodes.extend(
-                        [
-                            TextNode(sections[0], TextType.TEXT),
-                            TextNode(link_text, TextType.LINK, link_url),
-                            TextNode(sections[1], TextType.TEXT),
-                        ]
-                    )
-                    link_inserted = True
-                if node_first_split and not link_inserted:
-                    working_node = split_nodes[-1]
-                    del split_nodes[-1]
-                    sections = working_node.text.split(deliminator, 1)
-                    split_nodes.extend(
-                        [
-                            TextNode(sections[0], TextType.TEXT),
-                            TextNode(link_text, TextType.LINK, link_url),
-                            TextNode(sections[1], TextType.TEXT),
-                        ]
-                    )
-                    link_inserted = True
-                if link_inserted:
-                    continue
-            new_nodes.extend(remove_empty_text_nodes(split_nodes))
+            continue
+        for link in links:
+            sections = original_text.split(f"[{link[0]}]({link[1]})", 1)
+            if len(sections) != 2:
+                raise ValueError("invalid markdown, link section not closed")
+            if sections[0] != "":
+                new_nodes.append(TextNode(sections[0], TextType.TEXT))
+            new_nodes.append(TextNode(link[0], TextType.LINK, link[1]))
+            original_text = sections[1]
+        if original_text != "":
+            new_nodes.append(TextNode(original_text, TextType.TEXT))
     return new_nodes
 
 

@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 class HTMLNode:
     def __init__(
         self,
@@ -45,6 +48,16 @@ class HTMLNode:
         else:
             return f"HTMLNode(tag={self.tag}, value={self.value}, props={self.props}, children: None)"
 
+    def __eq__(self, other: object, /) -> bool:
+        if not isinstance(other, HTMLNode):
+            return False
+        return (
+            self.tag == other.tag
+            and self.value == other.value
+            and self.props == other.props
+            and self.children == other.children
+        )
+
 
 class LeafNode(HTMLNode):
     def __init__(
@@ -76,4 +89,6 @@ class ParentNode(HTMLNode):
             raise ValueError("ParentNode must have a tag")
         if not self.children:
             raise ValueError("ParentNode must have children")
+        if self.tag in self.voidTags:
+            return f"<{self.tag}{self.props_to_html()}>{''.join(map(lambda node: node.to_html(), self.children))}"
         return f"<{self.tag}{self.props_to_html()}>{''.join(map(lambda node: node.to_html(), self.children))}</{self.tag}>"
