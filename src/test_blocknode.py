@@ -308,7 +308,7 @@ raw **markdown**
                     ParentNode(
                         "blockquote",
                         [
-                            LeafNode(None, " A quoted line\n with "),
+                            LeafNode(None, "A quoted line\nwith "),
                             LeafNode("code", "code"),
                         ],
                     ),
