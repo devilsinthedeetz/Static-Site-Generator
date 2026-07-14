@@ -1,3 +1,4 @@
+from __future__ import annotations
 from enum import Enum
 from dataclasses import dataclass, field
 
@@ -52,7 +53,7 @@ class CodeBlock(BlockNode):
 @dataclass
 class ListBlock(BlockNode):
     list_type: ListType
-    items: list["ListItem"]
+    items: list[ListItem]
     start: int = 1
     tight: bool = True
 
@@ -64,14 +65,14 @@ class ListItem(MarkdownNode):
 
 @dataclass
 class Table(BlockNode):
-    header: "TableRow"
-    rows: list["TableRow"] = field(default_factory=list)
+    header: TableRow
+    rows: list[TableRow] = field(default_factory=list)
     alignments: list[TableAlignment] = field(default_factory=list)
 
 
 @dataclass
 class TableRow(MarkdownNode):
-    cells: list["TableCell"] = field(default_factory=list)
+    cells: list[TableCell] = field(default_factory=list)
 
 
 @dataclass
