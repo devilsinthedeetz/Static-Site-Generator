@@ -82,12 +82,12 @@ class TableCell(MarkdownNode):
 
 @dataclass
 class Bold(InlineNode):
-    children: list[MarkdownNode] = field(default_factory=list)
+    children: list[InlineNode] = field(default_factory=list)
 
 
 @dataclass
 class Italic(InlineNode):
-    children: list[MarkdownNode] = field(default_factory=list)
+    children: list[InlineNode] = field(default_factory=list)
 
 
 @dataclass
@@ -103,10 +103,10 @@ class Code(InlineNode):
 @dataclass
 class Link(InlineNode):
     url: str
-    children: list[MarkdownNode] = field(default_factory=list)
+    children: list[InlineNode] = field(default_factory=list)
 
 
 @dataclass
-class Image(MarkdownNode):
+class Image(InlineNode):
     url: str
     alt: str
