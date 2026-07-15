@@ -32,22 +32,22 @@ class InlineNode(MarkdownNode):
 @dataclass
 class Heading(BlockNode):
     lvl: int
-    children: list[MarkdownNode] = field(default_factory=list)
+    children: list[InlineNode] = field(default_factory=list)
 
 
 @dataclass
 class Paragraph(BlockNode):
-    children: list[MarkdownNode] = field(default_factory=list)
+    children: list[InlineNode] = field(default_factory=list)
 
 
 @dataclass
 class BlockQuote(BlockNode):
-    children: list[MarkdownNode] = field(default_factory=list)
+    children: list[BlockNode] = field(default_factory=list)
 
 
 @dataclass
 class CodeBlock(BlockNode):
-    children: list[MarkdownNode] = field(default_factory=list)
+    children: list[InlineNode] = field(default_factory=list)
 
 
 @dataclass
@@ -55,12 +55,12 @@ class ListBlock(BlockNode):
     list_type: ListType
     items: list[ListItem]
     start: int = 1
-    tight: bool = True
+    tight: bool = True  # for now, only tight lists are supported
 
 
 @dataclass
 class ListItem(MarkdownNode):
-    children: list[BlockNode] = field(default_factory=list)
+    children: list[InlineNode] = field(default_factory=list)
 
 
 @dataclass
