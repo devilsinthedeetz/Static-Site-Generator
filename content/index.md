@@ -13,6 +13,7 @@ Here's the deal, **I like Tolkien**.
 - [Why Glorfindel is More Impressive than Legolas](/blog/glorfindel)
 - [Why Tom Bombadil Was a Mistake](/blog/tom)
 - [The Unparalleled Majesty of "The Lord of the Rings"](/blog/majesty)
+- [The _Fellowship_ of the **Ring**](/blog/majesty/fellowship.html)
 
 ## Reasons I like Tolkien
 

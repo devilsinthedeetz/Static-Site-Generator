@@ -1,7 +1,11 @@
 import os
 import shutil
 import sys
-from blocknode import markdown_to_html_node
+
+# from blocknode import markdown_to_html_node
+from markdown_node import BlockNode
+from markdown_node_to_html_node import markdown_nodes_to_html_node
+from block_md_to_markdown_node import markdown_to_markdown_node
 
 
 def extract_title(md) -> str:
@@ -54,7 +58,9 @@ def generate_page(from_path, template_path, dest_path, base_path):
         md = file.read()
     with open(template_path, "r") as file:
         template = file.read()
-    html: str = markdown_to_html_node(md).to_html()
+    nodes: list[BlockNode] = markdown_to_markdown_node(md)
+    html: str = markdown_nodes_to_html_node(nodes).to_html()
+    # html: str = markdown_to_html_node(md).to_html()
     title: str = extract_title(md)
     # replace stuff
     final_file: str = template.replace("{{ Title }}", title)
@@ -68,13 +74,13 @@ def generate_page(from_path, template_path, dest_path, base_path):
 
 def copy_static_to_public(source_path: str, dest_path: str, deleted: bool):
     if not deleted:
-        if os.path.exists("public"):
-            shutil.rmtree("public")
+        if os.path.exists(dest_path):
+            shutil.rmtree(dest_path)
             deleted = True
-            os.mkdir("public")
+            os.mkdir(dest_path)
         else:
             deleted = True
-            os.mkdir("public")
+            os.mkdir(dest_path)
     source_dir: list[str] = os.listdir(source_path)
     if not source_dir:
         return
