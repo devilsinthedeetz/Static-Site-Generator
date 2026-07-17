@@ -2,7 +2,6 @@ import os
 import shutil
 import sys
 
-# from blocknode import markdown_to_html_node
 from markdown_node import BlockNode
 from markdown_node_to_html_node import markdown_nodes_to_html_node
 from block_md_to_markdown_node import markdown_to_markdown_node
@@ -60,7 +59,6 @@ def generate_page(from_path, template_path, dest_path, base_path):
         template = file.read()
     nodes: list[BlockNode] = markdown_to_markdown_node(md)
     html: str = markdown_nodes_to_html_node(nodes).to_html()
-    # html: str = markdown_to_html_node(md).to_html()
     title: str = extract_title(md)
     # replace stuff
     final_file: str = template.replace("{{ Title }}", title)
