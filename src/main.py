@@ -15,7 +15,7 @@ from article import Article, ArticleMetadata, ArticleType, Author, get_article_t
 load_dotenv()
 
 
-def extract_metadata(metadata: Post) -> ArticleMetadata:
+def extract_metadata(metadata) -> ArticleMetadata:
     title: str = ""
     description: str = ""
     article_type: ArticleType = ArticleType.INDEX
@@ -59,13 +59,11 @@ def extract_metadata(metadata: Post) -> ArticleMetadata:
             article_id = metadata["article_id"]
         if "tags" in metadata.keys():
             tags = metadata["tags"]
-        if "draft" in metadata.keys():
-            if metadata["draft"] == "true":
-                draft = True
-            else:
-                draft = False
+        if "draft" in metadata.keys() and isinstance(metadata["draft"], bool):
+            draft = metadata["draft"]
+        else:
+            draft = False
         if "image" in metadata.keys():
-            print(f"{metadata['image']}")
             image = metadata["image"]
     return ArticleMetadata(
         title,
@@ -133,6 +131,9 @@ def generate_page(from_path, template_path, dest_path, base_path):
     with open(from_path, "r") as file:
         metadata, md = frontmatter.parse(file.read())
     article: Article = Article(extract_metadata(metadata), md)
+    if article.metadata.draft == True:
+        print(f"Page from {from_path} is a draft. Skipping...")
+        return
     if article.metadata.type == ArticleType.INDEX:
         with open("index_template.html", "r") as file:
             template = file.read()
