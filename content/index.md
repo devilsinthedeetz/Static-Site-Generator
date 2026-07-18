@@ -1,47 +1,18 @@
-# Tolkien Fan Club
+---
+title: "Devils In The Deetz"
+description: "The blog of an ICU nurse, fitness enthusiast, and coding hobiest with a no niche blog"
+type: index
+published_at: "2026-07-17T21:24:17-0600"
+updated_at: "2026-07-17T21:32:57-0600"
+authors:
+  - name: Andrew
+    email: andrew@devilsinthedeetz.us
+link: ./index.html
+image: /images/devils_in_the_deetz.png
+draft: false
+---
+# Welcome
 
-![JRR Tolkien sitting](/images/tolkien.png)
+This site was generated with a custom-built [static site generator](https://www.boot.dev/courses/build-static-site-generator-python) from the course on [Boot.dev](https://www.boot.dev). I made some of my own adjustments, that I plan to discuss in a blog post at some point. Some seasoned software engineer prolly like "oH wOw, LoOk! aNoThEr 'hObiest cOdeR' wiTh A sHiTtY pyThOn sCriPt bLoG" and you're probably right. There are already so much better static site generators out there, but this shitty one is mine ❤️.
 
-Here's the deal, **I like Tolkien**.
-
-> "I am in fact a Hobbit in all but size."
->
-> -- J.R.R. Tolkien
-
-## Blog posts
-
-- [Why Glorfindel is More Impressive than Legolas](/blog/glorfindel)
-- [Why Tom Bombadil Was a Mistake](/blog/tom)
-- [The Unparalleled Majesty of "The Lord of the Rings"](/blog/majesty)
-- [The _Fellowship_ of the **Ring**](/blog/majesty/fellowship.html)
-
-## Reasons I like Tolkien
-
-- You can spend years studying the legendarium and still not understand its depths
-- It can be enjoyed by children and adults alike
-- Disney _didn't ruin it_ (okay, but Amazon might have)
-- It created an entirely new genre of fantasy
-
-## My favorite characters (in order)
-
-1. Gandalf
-2. Bilbo
-3. Sam
-4. Glorfindel
-5. Galadriel
-6. Elrond
-7. Thorin
-8. Sauron
-9. Aragorn
-
-Here's what `elflang` looks like (the perfect coding language):
-
-```
-func main(){
-    fmt.Println("Aiya, Ambar!")
-}
-```
-
-Want to get in touch? [Contact me here](/contact).
-
-This site was generated with a custom-built [static site generator](https://www.boot.dev/courses/build-static-site-generator-python) from the course on [Boot.dev](https://www.boot.dev).
+Anyway, my name is Andrew. Learn more about me in the [About Me](/about/index.html) section!

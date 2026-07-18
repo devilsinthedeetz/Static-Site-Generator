@@ -1,9 +1,22 @@
+---
+title: "Contact"
+description: "Send me emails, but don't be weird please"
+type: contact
+
+published_at: "2026-07-18T10:36:53-0600"
+updated_at: "2026-07-18T10:37:06-0600"
+
+authors:
+  - name: Andrew
+    email: andrew@example.com
+
+draft: false
+image: /images/about_me.png
+---
 # Contact the Author
 
-[< Back Home](/)
+Contact me at:
 
-Give me a call anytime to chat about Tolkien!
+- Andrew@devilsinthedeetz.us
 
-`555-555-5555`
-
-**"Váya márië."**
+## Contact Form Coming Soon!

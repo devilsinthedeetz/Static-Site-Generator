@@ -1,10 +1,86 @@
+from datetime import datetime
 import os
 import shutil
 import sys
+import frontmatter
+from frontmatter import Post
+from dotenv import load_dotenv
 
+from htmlnode import LeafNode
 from markdown_node import BlockNode
 from markdown_node_to_html_node import markdown_nodes_to_html_node
 from block_md_to_markdown_node import markdown_to_markdown_node
+from article import Article, ArticleMetadata, ArticleType, Author, get_article_type
+
+load_dotenv()
+
+
+def extract_metadata(metadata: Post) -> ArticleMetadata:
+    title: str = ""
+    description: str = ""
+    article_type: ArticleType = ArticleType.INDEX
+    published_at: datetime | None = None
+    authors: list[Author] = []
+    updated_at: datetime | None = None
+    slug: str | None = None
+    article_id: str | None = None
+    tags: list[str] = []
+    draft: bool = False
+    language: str | None = os.getenv("LANGUAGE")
+    image: str | None = ""
+    if metadata is not None:
+        if "title" in metadata.keys():
+            title = metadata["title"]
+        else:
+            raise ValueError("front matter requires title")
+        if "description" in metadata.keys():
+            description = metadata["description"]
+        else:
+            raise ValueError("front matter requires description")
+        if "type" in metadata.keys():
+            if metadata["type"] in ArticleType:
+                article_type = get_article_type(metadata["type"])
+        if "published_at" in metadata.keys():
+            published_at = datetime.fromisoformat(metadata["published_at"])
+        else:
+            raise ValueError("markdown frontmatter requires publushed_at")
+        if "authors" in metadata.keys():
+            for author in metadata["authors"]:
+                if author["name"]:
+                    if author["email"]:
+                        authors.append(Author(author["name"], author["email"]))
+                    else:
+                        authors.append(Author(author["name"]))
+        if "updated_at" in metadata.keys():
+            updated_at = datetime.fromisoformat(metadata["updated_at"])
+        if "slug" in metadata.keys():
+            slug = metadata["slug"]
+        if "article_id" in metadata.keys():
+            article_id = metadata["article_id"]
+        if "tags" in metadata.keys():
+            tags = metadata["tags"]
+        if "draft" in metadata.keys():
+            if metadata["draft"] == "true":
+                draft = True
+            else:
+                draft = False
+        if "image" in metadata.keys():
+            print(f"{metadata['image']}")
+            image = metadata["image"]
+    return ArticleMetadata(
+        title,
+        description,
+        article_type,
+        published_at,
+        authors,
+        updated_at,
+        slug,
+        article_id,
+        tags,
+        draft,
+        language,
+        image,
+    )
 
 
 def extract_title(md) -> str:
@@ -52,17 +128,37 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, bas
 def generate_page(from_path, template_path, dest_path, base_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     md: str = ""
+    metadata: object | None = None
     template: str = ""
     with open(from_path, "r") as file:
-        md = file.read()
-    with open(template_path, "r") as file:
-        template = file.read()
+        metadata, md = frontmatter.parse(file.read())
+    article: Article = Article(extract_metadata(metadata), md)
+    if article.metadata.type == ArticleType.INDEX:
+        with open("index_template.html", "r") as file:
+            template = file.read()
+    elif article.metadata.type == ArticleType.CONTACT:
+        with open("contact_template.html", "r") as file:
+            template = file.read()
+    elif article.metadata.type == ArticleType.BLOG_POST:
+        with open("blog_template.html", "r") as file:
+            template = file.read()
+    else:
+        with open(template_path, "r") as file:
+            template = file.read()
     nodes: list[BlockNode] = markdown_to_markdown_node(md)
     html: str = markdown_nodes_to_html_node(nodes).to_html()
     title: str = extract_title(md)
+    desc = article.metadata.description
+    image = ""
+    if article.metadata.image:
+        image = LeafNode("img", "", {"src": article.metadata.image}).to_html()
+    author = article.metadata.authors[0].name
     # replace stuff
     final_file: str = template.replace("{{ Title }}", title)
     final_file = final_file.replace("{{ Content }}", html)
+    final_file = final_file.replace("{{ description }}", desc)
+    final_file = final_file.replace("{{ image }}", image)
+    final_file = final_file.replace("{{ Author }}", author)
     final_file = final_file.replace('href="/', f'href="{base_path}')
     final_file = final_file.replace('src="/', f'src="{base_path}')
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)

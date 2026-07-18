@@ -1,13 +1,29 @@
 <!doctype html>
 <html>
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ description }}">
+    <meta name="author" content="{{ Author }}">
     <title>{{ Title }}</title>
     <link href="/index.css" rel="stylesheet" />
   </head>
 
   <body>
+    <header>
+      <nav class="nav-menu">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/contact/">Contact</a></li>
+        </ul>
+      </nav>
+      <div>
+        {{ image }}
+        <p>{{ description }}</p>
+      </div>
+    </header>
     <article>{{ Content }}</article>
   </body>
 </html>

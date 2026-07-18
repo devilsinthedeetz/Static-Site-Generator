@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="The blog of an ICU nurse, fitness enthusiast, and coding hobiest with a no niche blog">
-    <meta name="author" content="Andrew">
-    <title>Contact the Author</title>
+    <meta name="description" content="{{ description }}">
+    <meta name="author" content="{{ Author }}">
+    <title>{{ Title }}</title>
     <link href="/index.css" rel="stylesheet" />
   </head>
   <body>
@@ -18,18 +18,20 @@
           <li><a href="/contact/">Contact</a></li>
         </ul>
       </nav>
-      <img src="/images/about_me.png">
-      <p>Send me emails, but don't be weird please</p>
+      <div>
+        {{ image }}
+        <div class="sub-heading">{{ description }}</div>
+      </div>
     </header>
 
     <main>
       <section id="home">
-        <div><h1>Contact the Author</h1><p>Contact me at:</p><ul><li>Andrew@devilsinthedeetz.us</li></ul><h2>Contact Form Coming Soon!</h2></div>
+        {{ Content }}
       </section>
     </main>
 
     <footer>
-      <p>&copy; 2026 Devils In The Deetz. All rights reserved.</p>
+      
     </footer>
   </body>
 </html>
