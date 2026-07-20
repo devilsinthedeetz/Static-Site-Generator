@@ -8,7 +8,7 @@ from article import Article, ArticleType, extract_metadata, article_type_to_temp
 from block_md_to_markdown_node import markdown_to_markdown_node
 from htmlnode import LeafNode
 from markdown_node_to_html_node import markdown_nodes_to_html_node
-from constants import BASE_DIR
+from constants import BASE_DIR, DEFAULT_TEMPLATE, DOMAIN
 
 
 def extract_title(md) -> str:
@@ -87,8 +87,8 @@ def generate_page(from_path, template_path, dest_path, base_path):
     final_file = final_file.replace("{{ description }}", desc)
     final_file = final_file.replace("{{ image }}", image)
     final_file = final_file.replace("{{ Author }}", author)
-    final_file = final_file.replace('href="/', f'href="{base_path}')
-    final_file = final_file.replace('src="/', f'src="{base_path}')
+    final_file = final_file.replace('href="/', f'href="{DOMAIN}{base_path}')
+    final_file = final_file.replace('src="/', f'src="{DOMAIN}{base_path}')
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     with open(dest_path, "w") as file:
         file.write(final_file)
@@ -139,7 +139,7 @@ def main():
         print("sys.argv[1] out of range")
         print(f"using base_path '{BASE_DIR}'")
     copy_static_to_public("static", "docs", False)
-    generate_pages_recursive("content", "template.html", "docs", base_path)
+    generate_pages_recursive("content", DEFAULT_TEMPLATE, "docs", base_path)
 
 
 main()
