@@ -1,7 +1,7 @@
 ---
 title: "About Me"
 description: "So... about me..."
-type: about
+type: index
 
 published_at: "2026-07-18T09:32:00-06:00"
 updated_at: "2026-07-20T14:15:00-06:00"

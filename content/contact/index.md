@@ -11,7 +11,7 @@ authors:
     email: andrew@example.com
 
 draft: false
-image: /images/about_me.png
+image: /images/contact_me.png
 ---
 # Contact the Author
 

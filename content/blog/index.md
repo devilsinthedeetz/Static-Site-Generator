@@ -10,6 +10,8 @@ authors:
   - name: Andrew
     email: andrew@example.com
 
+image: /images/fetch.png
+
 draft: false
 ---
 # My Blog
