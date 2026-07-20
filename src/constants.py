@@ -1,0 +1,7 @@
+DOMAIN = "http://localhost:8888"
+BASE_DIR = "/"
+BLOG_INDEX_HAS_FEED = "true"
+LANGUAGE = "en-US"
+DEFAULT_AUTHOR = "Andrew"
+DEFAULT_AUTHOR_EMAIL = "andrew@devilsinthedeetz.us"
+DEFAULT_TEMPLATE = "template.html"
