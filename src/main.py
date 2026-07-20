@@ -185,7 +185,7 @@ def main():
             ArticleType.INDEX,
         ],
     )
-    content = articles_to_card_list(visible_articles)
+    content = articles_to_card_list(visible_articles, base_path)
     final_file = generate_blog_cards(template, content)
     with open(f"docs/{BLOG_INDEX_LOCATION}/index.html", "w") as file:
         file.write(final_file)

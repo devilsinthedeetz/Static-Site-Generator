@@ -6,13 +6,13 @@ from collections.abc import Iterable
 from html import escape
 
 
-def article_to_card(article: Article) -> str:
+def article_to_card(article: Article, base_path) -> str:
     metadata = article.metadata
 
     title = escape(metadata.title)
     description = escape(metadata.description)
     author_name = escape(metadata.authors[0].name)
-    url = f"/blog/{article.metadata.slug}.html"
+    url = f"{base_path}blog/{article.metadata.slug}.html"
 
     published_text = metadata.published_at.strftime("%Y-%m-%d")
     published_datetime = metadata.published_at.isoformat()
@@ -43,8 +43,8 @@ def article_to_card(article: Article) -> str:
 """.strip()
 
 
-def articles_to_card_list(articles: list[Article]) -> str:
-    cards = "\n".join(article_to_card(article) for article in articles)
+def articles_to_card_list(articles: list[Article], base_path) -> str:
+    cards = "\n".join(article_to_card(article, base_path) for article in articles)
 
     return f"""
 <ul class="post-list">
