@@ -46,8 +46,8 @@ def replace_placeholders(template: str, article: Article, base_path) -> str:
         "{{ description }}": article.metadata.description,
         "{{ image }}": image,
         "{{ author }}": article.metadata.authors[0].name,
-        'href="/': f'href="{DOMAIN}{base_path}',
-        'src="/': f'src="{DOMAIN}{base_path}',
+        'href="/': f'href="{base_path}',
+        'src="/': f'src="{base_path}',
     }
 
     for placeholder, replacement in replacements.items():
@@ -169,8 +169,7 @@ def main():
     try:
         base_path = sys.argv[1]
     except IndexError:
-        print("sys.argv[1] out of range")
-        print(f"using base_path '{BASE_DIR}' instead")
+        print(f"using base_path '{BASE_DIR}'")
     copy_static_to_public("static", "docs", False)
     articles = generate_pages_recursive(
         "content", DEFAULT_TEMPLATE, "docs", base_path, []
