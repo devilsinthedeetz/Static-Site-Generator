@@ -8,6 +8,7 @@ from constants import LANGUAGE, DEFAULT_AUTHOR, DEFAULT_AUTHOR_EMAIL
 class ArticleType(Enum):
     INDEX = "index"
     BLOG_POST = "blog_post"
+    BLOG_INDEX = "blog_index"
     ARTICLE = "article"
     CONTACT = "contact"
     ABOUT = "about"
@@ -24,6 +25,8 @@ def get_article_type(type_str: str) -> ArticleType:
         return ArticleType.INDEX
     if type_str == "blog_post":
         return ArticleType.BLOG_POST
+    if type_str == "blog_index":
+        return ArticleType.BLOG_INDEX
     if type_str == "article":
         return ArticleType.ARTICLE
     if type_str == "contact":
@@ -42,6 +45,8 @@ def article_type_to_template(
         return "blog_template.html"
     if article_type == ArticleType.CONTACT:
         return "contact_template.html"
+    if article_type == ArticleType.BLOG_INDEX:
+        return "blog_index_template.html"
     return default_template
 
 

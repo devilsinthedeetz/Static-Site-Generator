@@ -1,7 +1,10 @@
 DOMAIN = "http://localhost:8888"
 BASE_DIR = "/"
-BLOG_INDEX_HAS_FEED = "true"
+BLOG_INDEX_WITH_FEED = True
+BLOG_INDEX_LOCATION = "blog"
+RSS_FEED_DIRECTORY = "feed"
 LANGUAGE = "en-US"
 DEFAULT_AUTHOR = "Andrew"
 DEFAULT_AUTHOR_EMAIL = "andrew@devilsinthedeetz.us"
 DEFAULT_TEMPLATE = "template.html"
+TIME_ZONE = "America/Denver"

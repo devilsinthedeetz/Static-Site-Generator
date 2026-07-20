@@ -261,3 +261,118 @@ caption {
   margin-bottom: 0.5em;
 }
 
+.post-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+}
+
+.post-card {
+  position: relative;
+  margin: 0;
+
+  background: #11192d;
+  border: 2px solid #79d8ff;
+  box-shadow:
+    inset 0 0 12px rgba(0, 255, 255, 0.05),
+    0 0 10px rgba(0, 255, 255, 0.12);
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.post-card::before {
+  content: "[ARTICLE]";
+
+  position: absolute;
+  top: -0.8em;
+  left: 0.9rem;
+
+  padding: 0 0.4rem;
+  background: #0b1020;
+  color: #6fe3b4;
+
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+}
+
+.post-card:hover,
+.post-card:focus-within {
+  border-color: #ff66cc;
+  box-shadow:
+    inset 0 0 12px rgba(255, 102, 204, 0.06),
+    0 0 14px rgba(255, 102, 204, 0.2);
+
+  transform: translateY(-2px);
+}
+
+.post-card__link {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  box-sizing: border-box;
+  padding: 1.25rem;
+
+  color: inherit;
+
+  /*
+   * Override the global dashed underline applied to all anchors.
+   */
+  border-bottom: none;
+  text-decoration: none;
+}
+
+.post-card__link:hover {
+  color: inherit;
+  border-bottom: none;
+  text-shadow: none;
+}
+
+.post-card__link:focus-visible {
+  outline: 2px solid #ff66cc;
+  outline-offset: 4px;
+}
+
+.post-card__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+
+  color: #5b8fb7;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.post-card__title {
+  margin: 0.75rem 0 0.5rem;
+  color: #79d8ff;
+  font-size: 1.25rem;
+}
+
+.post-card__description {
+  flex-grow: 1;
+  margin: 0 0 1rem;
+  color: #c6d5ea;
+}
+
+.post-card__action {
+  color: #6fe3b4;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.post-card:hover .post-card__title,
+.post-card:focus-within .post-card__title,
+.post-card:hover .post-card__action,
+.post-card:focus-within .post-card__action {
+  color: #ff66cc;
+}

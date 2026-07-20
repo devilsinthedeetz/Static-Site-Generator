@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ description }}">
+    <meta name="author" content="{{ Author }}">
+    <title>{{ Title }}</title>
+    <link href="/index.css" rel="stylesheet" />
+  </head>
+  <body>
+    <header>
+      <nav class="nav-menu">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/contact/">Contact</a></li>
+        </ul>
+      </nav>
+      <div>
+        {{ image }}
+        <div class="sub-heading">{{ description }}</div>
+      </div>
+    </header>
+
+    <main>
+      <section id="home">
+        {{ Content }}
+      </section>
+      <section id="posts">
+        {{ posts }}
+      </section>
+    </main>
+
+    <footer>
+      
+    </footer>
+  </body>
+</html>
