@@ -6,27 +6,27 @@
     <meta name="description" content="Why I replaced simple delimiter splitting with a structured Markdown tree.">
     <meta name="author" content="{{ Author }}">
     <title>Building a Markdown Site Generator</title>
-    <link href="http://localhost:8888/index.css" rel="stylesheet" />
+    <link href="http://localhost:8888/Static-Site-Generator/index.css" rel="stylesheet" />
   </head>
   <body>
     <header>
       <nav class="nav-menu">
         <ul>
-          <li><a href="http://localhost:8888/">Home</a></li>
-          <li><a href="http://localhost:8888/about/">About</a></li>
-          <li><a href="http://localhost:8888/blog/">Blog</a></li>
-          <li><a href="http://localhost:8888/contact/">Contact</a></li>
+          <li><a href="http://localhost:8888/Static-Site-Generator/">Home</a></li>
+          <li><a href="http://localhost:8888/Static-Site-Generator/about/">About</a></li>
+          <li><a href="http://localhost:8888/Static-Site-Generator/blog/">Blog</a></li>
+          <li><a href="http://localhost:8888/Static-Site-Generator/contact/">Contact</a></li>
         </ul>
       </nav>
       <div>
-        <img src="http://localhost:8888/images/markdown-ast.png" alt="Why I replaced simple delimiter splitting with a structured Markdown tree.">
+        <img src="http://localhost:8888/Static-Site-Generator/images/markdown-ast.png" alt="Why I replaced simple delimiter splitting with a structured Markdown tree.">
         <div class="sub-heading">Why I replaced simple delimiter splitting with a structured Markdown tree.</div>
       </div>
     </header>
 
     <main>
       <section id="home">
-        <div><h1>Building a Markdown Site Generator</h1><p>This site you're seeing now started out as a <a href="https://www.boot.dev/">boot.dev</a> guided project, designed to help students build a markdown file parser that translates them into HTML files, and serves them with python's built in http server. The finished project came with support for <strong>bold</strong> text, <em>italic</em> text, <code>code</code> text, <a href="https://www.youtube.com/watch?v=XfELJU1mRMg">links</a>, and <a href="https://www.flaticon.com/free-icons/triangles">images</a> <img src="http://localhost:8888/images/arrows.png" alt="images">.</p><blockquote><p>It supports block quotes</p></blockquote><ul><li>It also supports</li><li>Unordered lists</li><li>like these</li></ul><ol><li>As well as</li><li>Ordered lists</li><li>like so.</li></ol><pre><code>Code blocks are also supported.
+        <div><h1>Building a Markdown Site Generator</h1><p>This site you're seeing now started out as a <a href="https://www.boot.dev/">boot.dev</a> guided project, designed to help students build a markdown file parser that translates them into HTML files, and serves them with python's built in http server. The finished project came with support for <strong>bold</strong> text, <em>italic</em> text, <code>code</code> text, <a href="https://www.youtube.com/watch?v=XfELJU1mRMg">links</a>, and <a href="https://www.flaticon.com/free-icons/triangles">images</a> <img src="http://localhost:8888/Static-Site-Generator/images/arrows.png" alt="images">.</p><blockquote><p>It supports block quotes</p></blockquote><ul><li>It also supports</li><li>Unordered lists</li><li>like these</li></ul><ol><li>As well as</li><li>Ordered lists</li><li>like so.</li></ol><pre><code>Code blocks are also supported.
 </code></pre><p>This was a great start, but one thing that really bothered me about this project is <strong>that it <em>refused</em> to teach me</strong> <em>how to allow <strong>nested bold</strong> and italic</em> text. So I took it upon myself to overengineer the solution, which inspired this project to grow into my own <a href="https://jekyllrb.com/"><em>jekyll</em></a> <em>wannabe</em>.</p><h2>But Before I Continue</h2><table><thead><tr><th style="text-align: left">Take a look</th><th style="text-align: center">At What</th><th style="text-align: right">I Have Done</th></tr></thead><tbody><tr><td style="text-align: left"><strong>Tables</strong> with</td><td style="text-align: center">differently</td><td style="text-align: right">alligned columns</td></tr><tr><td style="text-align: left">Markdown frontmatter</td><td style="text-align: center">is now supported</td><td style="text-align: right">Metadata collected</td></tr><tr><td style="text-align: left">RSS/Atom feeds</td><td style="text-align: center">❌ To Do</td><td style="text-align: right">but coming soon</td></tr><tr><td style="text-align: left"><code>**support _for_ nested**</code></td><td style="text-align: center"><strong>markdown <em>text</em> styles</strong></td><td style="text-align: right">with proper code parsing</td></tr></tbody></table></div>
       </section>
     </main>
