@@ -4,7 +4,7 @@ import sys
 
 import frontmatter
 
-from article import Article, ArticleType, extract_metadata, article_type_to_template
+from article import Article, extract_metadata, article_type_to_template
 from block_md_to_markdown_node import markdown_to_markdown_node
 from htmlnode import LeafNode
 from markdown_node_to_html_node import markdown_nodes_to_html_node
@@ -19,6 +19,36 @@ def extract_title(md) -> str:
         return title
     else:
         raise Exception("markdown file must start with heading")
+
+
+def replace_placeholders(template: str, article: Article, base_path) -> str:
+    image = (
+        LeafNode(
+            "img",
+            "",
+            {"src": article.metadata.image, "alt": article.metadata.description},
+        ).to_html()
+        if article.metadata.image
+        else ""
+    )
+    html = markdown_nodes_to_html_node(
+        markdown_to_markdown_node(article.body)
+    ).to_html()
+
+    replacements: dict[str, str] = {
+        "{{ Title }}": article.metadata.title,
+        "{{ Content }}": html,
+        "{{ description }}": article.metadata.description,
+        "{{ image }}": image,
+        "{{ author }}": article.metadata.authors[0].name,
+        'href="/': f'href="{DOMAIN}{base_path}',
+        'src="/': f'src="{DOMAIN}{base_path}',
+    }
+
+    for placeholder, replacement in replacements.items():
+        template = template.replace(placeholder, replacement)
+
+    return template
 
 
 def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, base_path):
@@ -55,9 +85,6 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, bas
 
 def generate_page(from_path, template_path, dest_path, base_path):
     print(f"Generating page from {from_path} to {dest_path}")
-    md: str = ""
-    metadata: dict[str, object] = {}
-    template: str = ""
     with open(from_path, "r") as file:
         metadata, md = frontmatter.parse(file.read())
     article: Article = Article(extract_metadata(metadata), md)
@@ -70,25 +97,7 @@ def generate_page(from_path, template_path, dest_path, base_path):
     print(f"  using {template_path}")
     with open(template_path, "r") as file:
         template = file.read()
-    html: str = markdown_nodes_to_html_node(markdown_to_markdown_node(md)).to_html()
-    title: str = extract_title(md)
-    desc = article.metadata.description
-    image: str = ""
-    if article.metadata.image:
-        image = LeafNode(
-            "img",
-            "",
-            {"src": article.metadata.image, "alt": article.metadata.description},
-        ).to_html()
-    author: str = article.metadata.authors[0].name
-    # replace stuff
-    final_file: str = template.replace("{{ Title }}", title)
-    final_file = final_file.replace("{{ Content }}", html)
-    final_file = final_file.replace("{{ description }}", desc)
-    final_file = final_file.replace("{{ image }}", image)
-    final_file = final_file.replace("{{ Author }}", author)
-    final_file = final_file.replace('href="/', f'href="{DOMAIN}{base_path}')
-    final_file = final_file.replace('src="/', f'src="{DOMAIN}{base_path}')
+    final_file = replace_placeholders(template, article, base_path)
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     with open(dest_path, "w") as file:
         file.write(final_file)

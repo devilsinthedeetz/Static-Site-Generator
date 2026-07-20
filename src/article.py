@@ -14,6 +14,12 @@ class ArticleType(Enum):
 
 
 def get_article_type(type_str: str) -> ArticleType:
+    if type_str is None or type_str == "":
+        # print("""
+        #  no article type, assigning ArticleType.ARTICLE to document metadata
+        #  this may change your intended template
+        # """)
+        return ArticleType.ARTICLE
     if type_str == "index":
         return ArticleType.INDEX
     if type_str == "blog_post":
@@ -85,11 +91,11 @@ def extract_metadata(metadata) -> ArticleMetadata:
         description=metadata["description"],
         published_at=parse_published_datetime(metadata["published_at"]),
         updated_at=parse_updated_datetime(metadata.get("updated_at")),
-        article_type=get_article_type(metadata.get("type", ArticleType.ARTICLE)),
+        article_type=get_article_type(metadata.get("type")),
         authors=parse_authors(metadata.get("authors", [])),
         slug=metadata.get("slug"),
         article_id=metadata.get("article_id"),
-        tags=metadata.get("tags"),
+        tags=metadata.get("tags", []),
         draft=(
             metadata.get("draft", False)
             if isinstance(metadata.get("draft"), bool)
@@ -119,14 +125,17 @@ def parse_authors(authors_data) -> list[Author]:
     return authors
 
 
-def parse_updated_datetime(value: str) -> datetime | None:
+def parse_updated_datetime(value: str | datetime | None) -> datetime | None:
     if value is None or value == "":
         return None
-    try:
-        parsed = datetime.fromisoformat(value)
+    if isinstance(value, datetime):
+        parsed = value
+    else:
+        try:
+            parsed = datetime.fromisoformat(value)
 
-    except ValueError as error:
-        raise ValueError(f"Invalid publication datetime {value!r}") from error
+        except ValueError as error:
+            raise ValueError(f"Invalid publication datetime {value!r}") from error
 
     if parsed.tzinfo is None:
         raise ValueError("Publication datetime must include a timezone offset")
@@ -134,11 +143,17 @@ def parse_updated_datetime(value: str) -> datetime | None:
     return parsed
 
 
-def parse_published_datetime(value: str) -> datetime:
-    try:
-        parsed = datetime.fromisoformat(value)
-    except ValueError as error:
-        raise ValueError(f"Invalid publication datetime {value!r}") from error
+def parse_published_datetime(value: str | datetime) -> datetime:
+    if value is None:
+        raise ValueError("published_at in iso format required in markdown frontmatter")
+    if isinstance(value, datetime):
+        parsed = value
+    else:
+        try:
+            parsed = datetime.fromisoformat(value)
+
+        except ValueError as error:
+            raise ValueError(f"Invalid publication datetime {value!r}") from error
 
     if parsed.tzinfo is None:
         raise ValueError("Publication datetime must include a timezone offset")
